@@ -26,6 +26,8 @@ module.exports = {
     async run(client, constants) {
     await constants.interaction.deferReply();
 
+    const isApril = handleApril();
+        
     let userName = constants.interaction.options.getString('username');
     const isUrl = userName.startsWith('https');
 
