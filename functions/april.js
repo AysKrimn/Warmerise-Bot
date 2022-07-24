@@ -8,7 +8,6 @@ const handleApril = () => {
 const today = moment.tz(undefined, 'Europe/Istanbul').format('DD MM MMMM YYYY dddd HH:mm');
 
 const components = today.split(' ');
-console.log("Date:", components);
 
 
 const day = components[0];
