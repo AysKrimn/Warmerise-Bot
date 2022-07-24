@@ -9,6 +9,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 
+const baseURL = "https://warmerise.com";
 
 module.exports = {
     botPermissions: ["READ_MESSAGE_HISTORY", "EMBED_LINKS"],
@@ -41,8 +42,7 @@ module.exports = {
     const url = encodeURI(path);
 
     const request = await fetch(url).catch(e => {});
-
-    console.log("STATUS CODE:", request.status);
+        
     if(request.status == 403) return constants.interaction.editReply("I don't have permission to view this private page.");
 
     if(request.ok) {
@@ -50,7 +50,6 @@ module.exports = {
     const html = await request.text().catch(e => {});
     const $ = cheerio.load(html);
 
-    $('.datagrid').each((i, el) => {
     const listItems = $(".layout_page_user_profile_index"); 
 
     listItems.each(function(idx, li) {
@@ -83,30 +82,25 @@ module.exports = {
     return $(this).text() === 'Highest Killstreak';
     }).next().text().trim();
 
-    let tableContent = $(el).children().text().trim();
+    let tableContent = $(li).find('.datagrid').children().text().trim();
 
     let weaponStats = handleStats(tableContent);
     
-    console.log("Veriler:", weaponStats);
+    // KLANLAR VE TOPLAM KLAN SAYISI BOLUMU BURADA BASLAR
 
+    let clans = [];
 
-    // KLANLAR VE TOPLAM KLAN SAYISI BOLUMU
-    const groups = $('#profile_groups').map((i, element) => ({
+    $('#profile_groups > li').each((i, element) => {
 
-    Clan1: escapeMarkDown($(element).find('.groups_profile_tab_title').eq(0).text().trim()),
-    Clan2: escapeMarkDown($(element).find('.groups_profile_tab_title').eq(1).text().trim()),
-    Clan3: escapeMarkDown($(element).find('.groups_profile_tab_title').eq(2).text().trim()),
-    Clan4: escapeMarkDown($(element).find('.groups_profile_tab_title').eq(3).text().trim()),
-    Clan5: escapeMarkDown($(element).find('.groups_profile_tab_title').eq(4).text().trim()),
-            
-    Link1: $(element).find('.groups_profile_tab_title').eq(0).find('a').attr('href'),
-    Link2: $(element).find('.groups_profile_tab_title').eq(1).find('a').attr('href'),
-    Link3: $(element).find('.groups_profile_tab_title').eq(2).find('a').attr('href'),
-    Link4: $(element).find('.groups_profile_tab_title').eq(3).find('a').attr('href'),
-    Link5: $(element).find('.groups_profile_tab_title').eq(4).find('a').attr('href')
-    })).get()
+    const c_name = escapeMarkDown($(element).find('.groups_profile_tab_title').find('a').text());
+    const c_link = $(element).find('.groups_profile_tab_title').find('a').attr('href');
+    
+    clans.push(`[${c_name}](${baseURL}${c_link})`);
 
+    });
 
+    if(clans.length) {
+  
     let totalClan; 
     let pattern = /\d+/g;
 
@@ -116,21 +110,10 @@ module.exports = {
      // tabcontent 1. dizin sadece rakamı verir.
      if(tabContent.length == 1) totalClan = tabContent[0].match(pattern);
      if(tabContent.length > 1) totalClan = tabContent[1].match(pattern);
-  
-    console.log("clan sayisi:", totalClan);
 
-    let arr = ["Clan(s): Not a member of any clan."];
-    groups.forEach(val => {
+     if(totalClan && totalClan > 5) clans.push(` ${totalClan - 5} more.`); 
 
-    if(val.Clan1) { arr = []; arr.push(`Clan(s): [${val.Clan1}](https://warmerise.com${val.Link1})`); }
-    if(val.Clan2) arr.push(`[${val.Clan2}](https://warmerise.com${val.Link2})`);
-    if(val.Clan3) arr.push(`[${val.Clan3}](https://warmerise.com${val.Link3})`);
-    if(val.Clan4) arr.push(`[${val.Clan4}](https://warmerise.com${val.Link4})`);
-    if(val.Clan5) arr.push(`[${val.Clan5}](https://warmerise.com${val.Link5})`);
-    
-    });
-
-    if(totalClan && totalClan > 5) arr.push(` ${totalClan - 5} more.`); 
+     } else clans.push("Not a member of any clan.");
 
     // KLANLAR VE TOPLAM KLAN SAYISI BOLUMU BITER
     
@@ -139,17 +122,21 @@ module.exports = {
     .find("span[class='timestamp']")
     .last().text();
 
-    const badges = []
-    const value = $(li).find("div[class='badge-wrapper']");
-
-    const place = value.find("a").attr('title');
-    const link = value.find('a').attr('href');
-
-    if(place) badges.push(`Achievements/Victories:\n[${place}](https://warmerise.com${link})`);
-
-
     let footer = `• Joined: ${created}`;
-    if(!created) { footer = "• This profile is private."; arr[0] = false; } 
+
+    if(!created) { footer = "• This profile is private."; clans[0] = false; } 
+
+
+    const badges = [];
+
+    $(li).find("div[class='badge-wrapper']").each((i, element) => {
+
+    const place = $(element).find('a').attr('title');
+    const e_link = $(element).find('a').attr('href');
+
+    badges.push(`[${place}](${baseURL}${e_link})`);
+
+    });
 
     switch(rank) {
     case "Not ranked yet":
@@ -179,15 +166,12 @@ module.exports = {
     const embed = new MessageEmbed()
     .setColor(color)
     .setDescription(`>>> User Stats\nRank: ${rank}\nXP: ${xp}\nKills: ${kills}\nDeaths: ${deaths}\nKDR: ${kdr}\nHighest Killstreak: ${hk}\nFavourite Weapon: ${weaponStats.mostKills}`)
-    .setThumbnail(`https://warmerise.com/${image}`)
+    .setThumbnail(`${baseURL}/${image}`)
     .setFooter({ text: footer });
-
-
-    console.log("CLANS:", arr);
     // clan section false değilse clanları göster
-    if(arr[0] != false) embed.description = `${embed.description}\n${arr.join(' ')}`;
+    if(clans[0] != false) embed.description = `${embed.description}\nClan(s): ${clans.join(' ')}`;
     // badgeler varsa badgeleri göster
-    if(badges.length) embed.description = `${embed.description}\n${badges}`;
+    if(badges.length) embed.description = `${embed.description}\nAchievements/Victories:\n${badges.join('\n')}`;
 
     let displayMsg;
 
@@ -197,7 +181,7 @@ module.exports = {
 
     }); // listeItems biter
 
-    });
+
 
 
     // profile bulunamadıysa
@@ -221,13 +205,9 @@ module.exports = {
         const u_name = $(element).text().trim();
         const u_link = $(element).find('a').attr('href');
 
-        console.log("link:", u_link)
-
-        foundUsers.push(`• [${u_name}](https://warmerise.com${u_link})`);
+        foundUsers.push(`• [${u_name}](${baseURL}${u_link})`);
 
         });
-
-        console.log("search:", foundUsers);
 
         if(!foundUsers.length) return constants.interaction.editReply("Could not find requested player.");
      
