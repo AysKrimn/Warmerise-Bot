@@ -202,7 +202,7 @@ module.exports = {
 
         $('#browsemembers_ul > li').each((i, element) => {
 
-        const u_name = $(element).text().trim();
+        const u_name = $(element).find('a').text().trim();
         const u_link = $(element).find('a').attr('href');
 
         foundUsers.push(`• [${u_name}](${baseURL}${u_link})`);
