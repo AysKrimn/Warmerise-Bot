@@ -169,9 +169,9 @@ module.exports = {
     .setThumbnail(`${baseURL}/${image}`)
     .setFooter({ text: footer });
     // clan section false değilse clanları göster
-    if(clans[0] != false) embed.description = `${embed.description}\nClan(s): ${clans.join(' ')}`;
+    if(clans[0] != false) embed.description += `\nClan(s): ${clans.join(' ')}`;
     // badgeler varsa badgeleri göster
-    if(badges.length) embed.description = `${embed.description}\nAchievements/Victories:\n${badges.join('\n')}`;
+    if(badges.length) embed.description += `\nAchievements/Victories:\n${badges.join('\n')}`;
 
     let displayMsg;
 
