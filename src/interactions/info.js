@@ -2,6 +2,7 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
 
 const cheerio = require('cheerio');
 const handleStats = require('../../functions/handleStats');
+const handleApril = require('../../functions/april');
 
 const { escapeMarkDown } = require('../../functions/escapeCharacters');
 const { SlashCommandBuilder } = require('@discordjs/builders');
@@ -171,7 +172,8 @@ module.exports = {
     }
 
     if(rank >= 4 && rank <= 100) rank = `🏅 ${rank}`;
-
+    if(isApril) rank = "**Banned**"; 
+        
     const embed = new MessageEmbed()
     .setColor(color)
     .setDescription(`>>> User Stats\nRank: ${rank}\nXP: ${xp}\nKills: ${kills}\nDeaths: ${deaths}\nKDR: ${kdr}\nHighest Killstreak: ${hk}\nFavourite Weapon: ${weaponStats.mostKills}`)
