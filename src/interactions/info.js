@@ -27,7 +27,7 @@ module.exports = {
     await constants.interaction.deferReply();
 
     const isApril = handleApril();
-        
+
     let userName = constants.interaction.options.getString('username');
     const isUrl = userName.startsWith('https');
 
@@ -175,7 +175,7 @@ module.exports = {
 
     if(rank >= 4 && rank <= 100) rank = `🏅 ${rank}`;
     if(isApril) rank = "**Banned**"; 
-        
+
     const embed = new MessageEmbed()
     .setColor(color)
     .setDescription(`>>> User Stats\nRank: ${rank}\nXP: ${xp}\nKills: ${kills}\nDeaths: ${deaths}\nKDR: ${kdr}\nHighest Killstreak: ${hk}\nFavourite Weapon: ${weaponStats.mostKills}`)
@@ -203,7 +203,6 @@ module.exports = {
     // profile bulunamadıysa
     } else {
 
-    let users = [];
     const path = `https://warmerise.com/members?displayname=${userName}`;
     const url = encodeURI(path);
 
@@ -214,58 +213,29 @@ module.exports = {
     const $ = cheerio.load(html);
 
     //const result_text = $('body').find("h3").text().trim();
-    //console.log("User Sayısı:", result_text);
 
-    // userleri ilk 10'a göre mapla
-    // TODO: Kodlar kısaltılacak ve iterasyon uygulanacak.
-    const search_results = $('#browsemembers_ul').map((i, element) => ({
+        const foundUsers = [];
 
-        user1: $(element).find('.browsemembers_results_info').eq(0).find('a').text(),
-        user2: $(element).find('.browsemembers_results_info').eq(1).find('a').text(),
-        user3: $(element).find('.browsemembers_results_info').eq(2).find('a').text(),
-        user4: $(element).find('.browsemembers_results_info').eq(3).find('a').text(),
-        user5: $(element).find('.browsemembers_results_info').eq(4).find('a').text(),
-        user6: $(element).find('.browsemembers_results_info').eq(5).find('a').text(),
-        user7: $(element).find('.browsemembers_results_info').eq(6).find('a').text(),
-        user8: $(element).find('.browsemembers_results_info').eq(7).find('a').text(),
-        user9: $(element).find('.browsemembers_results_info').eq(8).find('a').text(),
-        user10: $(element).find('.browsemembers_results_info').eq(9).find('a').text(),
-        
-        Link1: $(element).find('.browsemembers_results_info').eq(0).find('a').attr('href'),
-        Link2: $(element).find('.browsemembers_results_info').eq(1).find('a').attr('href'),
-        Link3: $(element).find('.browsemembers_results_info').eq(2).find('a').attr('href'),
-        Link4: $(element).find('.browsemembers_results_info').eq(3).find('a').attr('href'),
-        Link5: $(element).find('.browsemembers_results_info').eq(4).find('a').attr('href'),
-        Link6: $(element).find('.browsemembers_results_info').eq(5).find('a').attr('href'),
-        Link7: $(element).find('.browsemembers_results_info').eq(6).find('a').attr('href'),
-        Link8: $(element).find('.browsemembers_results_info').eq(7).find('a').attr('href'),
-        Link9: $(element).find('.browsemembers_results_info').eq(8).find('a').attr('href'),
-        Link10: $(element).find('.browsemembers_results_info').eq(9).find('a').attr('href')
-        })).get();
+        $('#browsemembers_ul > li').each((i, element) => {
 
+        const u_name = $(element).text().trim();
+        const u_link = $(element).find('a').attr('href');
 
-        if(!search_results.length) return constants.interaction.editReply("Could not find requested player.");
-        console.log("search:", search_results);
+        console.log("link:", u_link)
 
-        search_results.forEach((val) => {
-        val.user1 ? users.push(`• [${val.user1}](https://warmerise.com${val.Link1})`) : users.push("");
-        val.user2 ? users.push(`• [${val.user2}](https://warmerise.com${val.Link2})`) : users.push("");
-        val.user3 ? users.push(`• [${val.user3}](https://warmerise.com${val.Link3})`) : users.push("");
-        val.user4 ? users.push(`• [${val.user4}](https://warmerise.com${val.Link4})`) : users.push("");
-        val.user5 ? users.push(`• [${val.user5}](https://warmerise.com${val.Link5})`) : users.push("");
-        val.user6 ? users.push(`• [${val.user6}](https://warmerise.com${val.Link6})`) : users.push("");
-        val.user7 ? users.push(`• [${val.user7}](https://warmerise.com${val.Link7})`) : users.push("");
-        val.user8 ? users.push(`• [${val.user8}](https://warmerise.com${val.Link8})`) : users.push("");
-        val.user9 ? users.push(`• [${val.user9}](https://warmerise.com${val.Link9})`) : users.push("");
-        val.user10 ? users.push(`• [${val.user10}](https://warmerise.com${val.Link10})`) : users.push("");
+        foundUsers.push(`• [${u_name}](https://warmerise.com${u_link})`);
 
         });
 
+        console.log("search:", foundUsers);
+
+        if(!foundUsers.length) return constants.interaction.editReply("Could not find requested player.");
+     
 
         // embedi gönder
         const embed = new MessageEmbed()
         .setColor('GREEN')
-        .addField("Search Results", users.join('\n').toString())
+        .addField("Search Results", foundUsers.join('\n').toString())
         .setTimestamp();
 
         constants.interaction.editReply({ embeds: [embed]});
