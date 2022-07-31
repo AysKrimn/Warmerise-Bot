@@ -187,16 +187,20 @@ module.exports = {
     // profile bulunamadıysa
     } else {
 
-    const path = `https://warmerise.com/members?displayname=${userName}`;
-    const url = encodeURI(path);
+        const path = `https://warmerise.com/members?displayname=${userName}`;
+        const url = encodeURI(path);
 
-    const request = await fetch(url);
+        const request = await fetch(url);
     
-    if(request.ok) {
-    const html = await request.text().catch(e => {});
-    const $ = cheerio.load(html);
+        if(request.ok) {
+            
+        let n;
+        const html = await request.text().catch(e => {});
+        const $ = cheerio.load(html);
 
-    //const result_text = $('body').find("h3").text().trim();
+        const results = $('#browsemembers_results').find('h3').text().trim().split(' ');
+
+        [n] = results;
 
         const foundUsers = [];
 
@@ -217,7 +221,12 @@ module.exports = {
         .setColor('GREEN')
         .addField("Search Results", foundUsers.join('\n').toString())
         .setTimestamp();
+            
+            
+        const ref = `https://warmerise.com/members?displayname=${userName}`;
 
+        if(Number(n) > 10) { embed.setTitle(`${n} match`); embed.setURL(ref) }
+            
         constants.interaction.editReply({ embeds: [embed]});
         
 
