@@ -246,10 +246,7 @@ module.exports = {
         .addField("Search Results", foundUsers.join('\n').toString())
         .setTimestamp();
 
-
-        const ref = `https://warmerise.com/members?displayname=${userName}`;
-
-        if(Number(n) > 10) { embed.setTitle(`${n} match`); embed.setURL(ref) }
+        if(Number(n) > 10) { embed.setTitle(`${n} match`); embed.setURL(path) }
 
         constants.interaction.editReply({ embeds: [embed]});
         
