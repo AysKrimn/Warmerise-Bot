@@ -85,9 +85,7 @@ module.exports = {
     return $(this).text() === 'Highest Killstreak';
     }).next().text().trim();
 
-    let tableContent = $(li).find('.datagrid').children().text().trim();
-
-    let weaponStats = handleStats(tableContent);
+    let weaponStats = handleStats($);
 
 
     // KLANLAR VE TOPLAM KLAN SAYISI BOLUMU BURADA BASLAR
