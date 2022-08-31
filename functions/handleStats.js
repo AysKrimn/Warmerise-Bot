@@ -14,9 +14,6 @@ function stats($) {
  const p_weaponName = purchasedContent.find('tr td').eq(0).text()
  const p_weaponKills = Number(purchasedContent.find('tr td').eq(2).text())
 
- console.log("from fn:", f_weaponName, f_weaponKills)
- console.log("from fn:", p_weaponName, p_weaponKills)
-
  if(f_weaponKills > p_weaponKills) output.mostKills = f_weaponName
  else output.mostKills = p_weaponName
  
