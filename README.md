@@ -1,6 +1,6 @@
 # Node.js Warmerise-Bot
 
-An application that interacting with Discord API and displaying requested user's profile from external API. Made for Warmerise community discord server.
+An application that interacting with Discord API and display target user's profile from an external API. Made for Warmerise community discord server.
 The site of game is https://warmerise.com/
 
 The dependencies for this project;
