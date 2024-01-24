@@ -8,7 +8,7 @@ The dependencies for this project;
 - cheerio
 <br> <br>
 Usage:
-Clone the project, get your discord bot's token and insert it to "token" field in token.json. Do not share your discord bot's token with anyone.
+Clone the project, get your discord bot's token and insert it to "token2" field in token.json. Do not share your discord bot's token with anyone.
 
 Discord API ile etkilişime giren ve istenilen kullanıcının profilini harici bir API'dan çeken uygulama. Warmerise adındaki topluluk sunucusu için yapıldı. Botun işlevi istenilen kullanıcının bilgilerini gösterir.
 Oyunun bağlantısı https://warmerise.com/
@@ -18,7 +18,7 @@ Bu projede kullanılan kütüphaneler:
 - cheerio
 <br> <br>
 Kullanım:
-Projeyi klonlayın ve token.json dosyasındaki, token'e discord API da oluşturmuş olduğunuz botun tokenini girin. Tokeninizi kimseyle paylaşmayın.
+Projeyi klonlayın ve token.json dosyasındaki, token2'e discord API da oluşturmuş olduğunuz botun tokenini girin. Tokeninizi kimseyle paylaşmayın.
 
 Showcase / Ön izleme:
 
