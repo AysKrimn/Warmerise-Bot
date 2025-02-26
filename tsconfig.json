@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    /* General Options */
+    "target": "es2016",
+    "module": "commonjs",
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    /* Module Resolution Options */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking Options */
+    "strict": true,
+    "skipLibCheck": true
+  },
+
+  /* Source Include/Exclude */
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "stc/tests"]
+}

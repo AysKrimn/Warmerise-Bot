@@ -1,0 +1,14 @@
+services:
+  wm-bot:
+    build:
+       context: .
+       dockerfile: DockerFile
+    container_name: wm-bot-c
+    restart: unless-stopped
+    env_file:
+      - .env
+    develop:
+      watch:
+        - path: ./src
+          target: /app/dist
+          action: sync
