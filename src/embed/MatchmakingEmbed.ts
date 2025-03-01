@@ -1,6 +1,6 @@
 import { EmbedBuilder } from "discord.js";
 import MatchMaking from "../structures/MatchMaking";
-import { GREEN, ORANGE } from "../constants";
+import { GREEN, ORANGE, TIPICON } from "../constants";
 
 export class MatchmakingEmbed {
   private embed: EmbedBuilder;
@@ -18,7 +18,7 @@ export class MatchmakingEmbed {
   private setDescription() {
     const data = this.matchMaking.formatData();
     if (!data) {
-      this.embed.setDescription("No active servers found.");
+      this.embed.setDescription(`${TIPICON} No active servers found`);
       this.embed.setColor(ORANGE);
     } else {
       this.embed.setDescription(data);

@@ -4,6 +4,7 @@ export const ORANGE = "#FFA500";
 export const DOT = "•";
 export const CASHICON = "💵";
 export const LOCKICON = "🔒";
+export const TIPICON = "💡";
 
 export const FIELD_TITLES = {
   stats: "User Stats",
