@@ -7,8 +7,3 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    develop:
-      watch:
-        - path: ./src
-          target: /app/dist
-          action: sync
