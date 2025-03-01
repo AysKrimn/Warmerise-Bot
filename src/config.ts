@@ -30,6 +30,7 @@ const config = {
     token: process.env.DISCORD_TOKEN || "",
     testToken: process.env.DISCORD_TEST_TOKEN || "",
     clientId: process.env.DISCORD_CLIENT_ID || "",
+    sessionNo: "1",
   },
 };
 
