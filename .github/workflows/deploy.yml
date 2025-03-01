@@ -30,4 +30,8 @@ jobs:
           username: ${{ secrets.SSH_UNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_HUB_UNAME }}/wm-dc-app:latest
+            cd warmerise-bot
+            docker login -u ${{ secrets.DOCKER_HUB_UNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
+            docker-compose pull
+            docker-compose down
+            docker-compose up -d
