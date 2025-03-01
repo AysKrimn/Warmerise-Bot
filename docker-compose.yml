@@ -3,6 +3,7 @@ services:
     build:
        context: .
        dockerfile: DockerFile
+    image: iamthekidyouknow/wm-dc-app:latest
     container_name: wm-bot-c
     restart: unless-stopped
     env_file:
